@@ -9,7 +9,12 @@
 
 	async function fetchMessages() {
 		const res = await fetch('/api/messages');
-		messages = await res.json();
+		const data = await res.json();
+		if (res.ok) {
+			messages = data;
+		} else {
+			console.error(data.error);
+		}
 	}
 
 	async function sendMessage() {
@@ -19,9 +24,13 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ text: newMessage, sender: username })
 			});
-			const newMessageData = await res.json();
-			messages = [...messages, newMessageData];
-			newMessage = '';
+			const data = await res.json();
+			if (res.ok) {
+				messages = [...messages, data];
+				newMessage = '';
+			} else {
+				console.error(data.error);
+			}
 		}
 	}
 
@@ -94,7 +103,7 @@
 					<h1 class="text-xl font-bold">Chat App</h1>
 				</div>
 				<div class="flex items-center">
-					<span class="font-medium">{username}  </span>
+					<span class="font-medium">{username} </span>
 				</div>
 			</div>
 		</header>
@@ -169,7 +178,13 @@
 					<div
 						class="flex items-center justify-center bg-gray-100 text-gray-800 py-2 px-4 rounded-md"
 					>
-						<p> to run the client follow these steps you wil need node js installed<br> <code>step 1: download it <br> step 2: unzipt it<br> step 3: run npm i<br> step 4: run node terminal-client.js</code></p>
+						<p>
+							to run the client follow these steps you wil need node js installed<br />
+							<code
+								>step 1: download it <br /> step 2: unzipt it<br /> step 3: run npm i<br /> step 4: run
+								node terminal-client.js</code
+							>
+						</p>
 					</div>
 				</div>
 			</div>
@@ -378,8 +393,8 @@
 		background-color: #434190;
 	}
 	.transition {
-		transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow,
-			transform;
+		transition-property:
+			background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
 		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 		transition-duration: 150ms;
 	}
