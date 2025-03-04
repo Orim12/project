@@ -217,7 +217,7 @@
 	</footer>
 {/if}
 
-<style>
+<style lang="scss">
 	.min-h-screen {
 		min-height: 100vh;
 	}
@@ -324,6 +324,13 @@
 		position: relative;
 		width: min-content;
 		max-width: 1700px;
+
+		@media (max-width: 1000px) {
+			flex: 1 1 10%;
+			position: relative;
+			width: min-content;
+			max-width: 900px;
+		}
 	}
 	.items-center {
 		align-items: center;
