@@ -1,7 +1,7 @@
 {
 	"name": "project",
 	"private": true,
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
@@ -12,6 +12,11 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint ."
+	},
+	"dependencies": {
+		"express": "^4.17.1",
+		"node-fetch": "^3.3.2",
+		"ws": "^7.4.6"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
