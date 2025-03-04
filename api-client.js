@@ -1,6 +1,11 @@
 import fetch from 'node-fetch';
 import readline from 'readline';
-import { exec } from 'child_process';
+import fs from 'fs/promises';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const API_URL = 'https://chating-with-friends.netlify.app/api/messages'; // Updated API URL
 const GITHUB_REPO_URL = 'https://raw.githubusercontent.com/Orim12/project/refs/heads/terminal-download/api-client.js'; // Updated GitHub repo URL
@@ -10,11 +15,11 @@ let currentInput = '';
 async function checkForUpdates() {
     const response = await fetch(GITHUB_REPO_URL);
     const latestScript = await response.text();
-    const currentScript = await fs.promises.readFile(__filename, 'utf-8');
+    const currentScript = await fs.readFile(__filename, 'utf-8');
 
     if (latestScript !== currentScript) {
         console.log('A new version is available. Updating...');
-        await fs.promises.writeFile(__filename, latestScript);
+        await fs.writeFile(__filename, latestScript);
         console.log('Update complete. Please restart the application.');
         process.exit(0);
     } else {
