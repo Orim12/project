@@ -5,6 +5,7 @@
 	let username = '';
 	let isUsernameSet = false;
 	let messagesEndRef;
+	let showPopup = false;
 
 	async function fetchMessages() {
 		const res = await fetch('/api/messages');
@@ -46,6 +47,14 @@
 		const date = new Date(timestamp);
 		return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 	}
+
+	function handleDownloadClick() {
+		showPopup = true;
+	}
+
+	function closePopup() {
+		showPopup = false;
+	}
 </script>
 
 {#if !isUsernameSet}
@@ -85,7 +94,7 @@
 					<h1 class="text-xl font-bold">Chat App</h1>
 				</div>
 				<div class="flex items-center">
-					<span class="font-medium">{username}  </span>
+					<span class="font-medium">{username}  </span>
 				</div>
 			</div>
 		</header>
@@ -151,20 +160,37 @@
 					from the command line.
 				</p>
 				<div class="flex flex-col sm:flex-row gap-3">
-					<a
-						href="/terminal-client.js"
-						download="terminal-client.js"
+					<button
+						on:click={handleDownloadClick}
 						class="flex items-center justify-center bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-200"
 					>
 						Download Terminal Client
-					</a>
+					</button>
 					<div
 						class="flex items-center justify-center bg-gray-100 text-gray-800 py-2 px-4 rounded-md"
 					>
-						<code>node terminal-client.js</code>
+						<p> to run the client follow these steps you wil need node js installed<br> <code>step 1: download it <br> step 2: unzipt it<br> step 3: run npm i<br> step 4: run node terminal-client.js</code></p>
 					</div>
 				</div>
 			</div>
+
+			{#if showPopup}
+				<div class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
+					<div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+						<h2 class="text-xl font-bold mb-4">Download Command</h2>
+						<p class="mb-4">Run the following command in your terminal to download the client:</p>
+						<code class="block bg-gray-100 p-2 rounded mb-4"
+							>wget https://github.com/Orim12/project/releases/download/terminal-client/project.zip</code
+						>
+						<button
+							on:click={closePopup}
+							class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-200"
+						>
+							Close
+						</button>
+					</div>
+				</div>
+			{/if}
 		</main>
 
 		<footer class="bg-white border-t border-gray-200 p-4">
@@ -255,6 +281,9 @@
 	}
 	.mb-3 {
 		margin-bottom: 0.75rem;
+	}
+	.mb-4 {
+		margin-bottom: 1rem;
 	}
 	.mb-6 {
 		margin-bottom: 1.5rem;
@@ -349,8 +378,8 @@
 		background-color: #434190;
 	}
 	.transition {
-		transition-property:
-			background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+		transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow,
+			transform;
 		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 		transition-duration: 150ms;
 	}
