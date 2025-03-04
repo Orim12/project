@@ -1,9 +1,26 @@
 import fetch from 'node-fetch';
 import readline from 'readline';
+import { exec } from 'child_process';
 
-const API_URL = 'https://chating-with-friends.netlify.app/api/messages';
+const API_URL = 'https://chating-with-friends.netlify.app/api/messages'; // Updated API URL
+const GITHUB_REPO_URL = 'https://raw.githubusercontent.com/Orim12/project/refs/heads/terminal-download/api-client.js'; // Updated GitHub repo URL
 let messages = [];
 let currentInput = '';
+
+async function checkForUpdates() {
+    const response = await fetch(GITHUB_REPO_URL);
+    const latestScript = await response.text();
+    const currentScript = await fs.promises.readFile(__filename, 'utf-8');
+
+    if (latestScript !== currentScript) {
+        console.log('A new version is available. Updating...');
+        await fs.promises.writeFile(__filename, latestScript);
+        console.log('Update complete. Please restart the application.');
+        process.exit(0);
+    } else {
+        console.log('You are using the latest version.');
+    }
+}
 
 async function getMessages() {
     const response = await fetch(API_URL);
@@ -15,9 +32,11 @@ function displayMessages() {
     console.clear();
     console.log('Messages:');
     messages.forEach((message) => {
-        console.log(`[${new Date(message.timestamp).toLocaleTimeString()}] ${message.user}: ${message.text}`);
+        if (message) { // Check if message is not null
+            console.log(`[${new Date(message.timestamp).toLocaleTimeString()}] ${message.sender}: ${message.text}`);
+        }
     });
-    console.log('\nType your message below (type "exit" to quit):');
+    console.log('\nType your message below (use ctrl+c to exit):');
     process.stdout.write(currentInput);
 }
 
@@ -25,7 +44,7 @@ async function postMessage(user, text) {
     const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user, text })
+        body: JSON.stringify({ sender: user, text }) // Updated property names
     });
     const newMessage = await response.json();
     messages.push(newMessage);
@@ -64,4 +83,7 @@ function startChat() {
     });
 }
 
-startChat();
+(async () => {
+    await checkForUpdates();
+    startChat();
+})();
