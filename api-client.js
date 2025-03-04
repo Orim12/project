@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import readline from 'readline';
 
-const API_URL = 'http://localhost:5173/api/messages';
+const API_URL = 'https://chating-with-friends.netlify.app/api/messages';
 let messages = [];
 let currentInput = '';
 
