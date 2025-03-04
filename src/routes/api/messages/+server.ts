@@ -7,8 +7,8 @@ export async function GET() {
 }
 
 export async function POST({ request }) {
-    const { user, text } = await request.json();
-    const newMessage = { user, text, timestamp: new Date() };
+    const { sender, text } = await request.json();
+    const newMessage = { sender, text, timestamp: new Date() };
     messages.push(newMessage);
     return json(newMessage);
 }
